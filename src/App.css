@@ -50,6 +50,15 @@ than programmatically, dynamically update those attributes.
 .App-game-board-column {
     background: #FFFFFF;
     flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 0;
     margin: 1px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
+.App-icon {
+    color: #FFF;
+}
