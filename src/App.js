@@ -38,11 +38,11 @@ class App extends Component {
 
             var rows = [];
 
-            for (var i = 0; i < 3; ++i) {
+            for (var i = 0; i < this.state.game.boardSize; ++i) {
 
                 var cols = [];
 
-                for (var j = 0; j < 3; ++j) {
+                for (var j = 0; j < this.state.game.boardSize; ++j) {
 
                     var state = this.state.game.board[i][j];
                     var iconContent;
@@ -80,10 +80,12 @@ class App extends Component {
 
             var resultText;
 
-            if (this.state.game.draw) {
-                resultText = 'IT IS DRAW!'
+            if (this.state.game.score > 0) {
+                resultText = 'YOU WIN';
+            } else if (this.state.game.score < 0) {
+                resultText = 'YOU LOST!';
             } else {
-                resultText = 'YOU LOST!'
+                resultText = 'IT IS DRAW!';
             }
 
             appSquareContent =
@@ -120,7 +122,7 @@ class App extends Component {
 
         this.setState({
             gameState: 'playing',
-            game: new Game(),
+            game: new Game(3),
         });
 
     }
@@ -128,7 +130,16 @@ class App extends Component {
     move(r, c) {
 
         var game = this.state.game;
-        game.move(r, c);
+        game.move('X', r, c);
+
+        // For debug!
+        // game.move(game.player === 'X' ? 'O' : 'X', r, c);
+
+        if (!game.over) {
+            var nextMove = {};
+            game.minimax(game, nextMove);
+            game.move('O', nextMove.r, nextMove.c);
+        }
 
         var gameState;
 
@@ -144,6 +155,8 @@ class App extends Component {
         });
 
     }
+
+
 
 }
 
