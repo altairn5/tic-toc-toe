@@ -62,3 +62,14 @@ than programmatically, dynamically update those attributes.
 .App-icon {
     color: #FFF;
 }
+
+.App-game-lobby {
+    /*background: #DEDEDE;*/
+    border: 1px solid #DEDEDE;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
