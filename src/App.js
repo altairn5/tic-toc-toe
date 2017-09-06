@@ -85,7 +85,7 @@ class App extends Component {
             } else if (this.state.game.score < 0) {
                 resultText = 'YOU LOST!';
             } else {
-                resultText = 'IT IS DRAW!';
+                resultText = 'DRAW!';
             }
 
             appSquareContent =
@@ -120,9 +120,12 @@ class App extends Component {
 
     restart() {
 
+        var game = new Game(3);
+        game.createBoard();
+
         this.setState({
             gameState: 'playing',
-            game: new Game(3),
+            game: game,
         });
 
     }
@@ -130,15 +133,33 @@ class App extends Component {
     move(r, c) {
 
         var game = this.state.game;
-        game.move('X', r, c);
+
+        if (!game.move('X', r, c)) {
+            return;
+        }
 
         // For debug!
         // game.move(game.player === 'X' ? 'O' : 'X', r, c);
 
         if (!game.over) {
+
             var nextMove = {};
+
+            var tempGameBoard = game.board;
+            game.board = JSON.parse(JSON.stringify(game.board));
+
+            game.minimaxCalls = 0;
+
+            console.time('minimax');
             game.minimax(game, nextMove);
+            console.timeEnd('minimax');
+
+            console.log('minimaxCalls: ' + game.minimaxCalls);
+
+            game.board = tempGameBoard;
+
             game.move('O', nextMove.r, nextMove.c);
+
         }
 
         var gameState;
@@ -155,8 +176,6 @@ class App extends Component {
         });
 
     }
-
-
 
 }
 

@@ -1,40 +1,59 @@
 class Game {
 
     constructor(boardSize) {
-
-        this.boardSize = boardSize > 3 ? 3 : boardSize;
-        this.board = [];
+        this.boardSize = boardSize > 3 ? boardSize : 3;
+        this.board = null;
         this.over = false;
         this.score = 0;
         this.player = '';
         this.numberOfMoves = 0;
+        this.minimaxCalls = 0;
+        this.depth = 0;
+    }
 
-        for (var i = 0; i < boardSize; ++i) {
+    createBoard() {
 
-            var cols = [];
+        this.board = new Array(this.boardSize);
 
-            for (var j = 0; j < boardSize; ++j) {
-                cols.push('');
+        for (var i = 0; i < this.boardSize; ++i) {
+
+            this.board[i] = new Array(this.boardSize);
+
+            for (var j = 0; j < this.boardSize; ++j) {
+                this.board[i][j] = '';
             }
-
-            this.board.push(cols);
 
         }
 
     }
 
     clone() {
-        var newInstance = new Game();
+
+        var newInstance = new Game(this.boardSize);
         newInstance.boardSize = this.boardSize;
-        newInstance.board = JSON.parse(JSON.stringify(this.board));
+
+        for (var i = 0; i < this.boardSize; ++i) {
+
+            for (var j = 0; j < this.boardSize; ++j) {
+                newInstance.board[i][j] = this.board[i][j];
+            }
+
+        }
+
         newInstance.over = this.over;
         newInstance.score = this.score;
-        newInstance.player = JSON.parse(JSON.stringify(this.player));
+        newInstance.player = this.player;
         newInstance.numberOfMoves = this.numberOfMoves;
+        newInstance.minimaxCalls = this.minimaxCalls;
+        newInstance.depth = this.depth;
         return newInstance;
     }
 
     move(player, r, c) {
+
+        if (this.board[r][c] !== '') {
+            return false;
+        }
 
         ++this.numberOfMoves;
 
@@ -46,6 +65,8 @@ class Game {
 
         // Calculate the score after X's move..
         this.calculateScore();
+
+        return true;
 
     }
 
@@ -180,6 +201,8 @@ class Game {
 
     minimax(game, nextMove) {
 
+        ++this.minimaxCalls;
+
         if (game.over) {
             return game.score;
         }
@@ -196,9 +219,9 @@ class Game {
                     continue;
                 }
 
-                var newGame = game.clone();
-
-                newGame.move(newGame.player === 'X' ? 'O' : 'X', i, j);
+                var newGame = new Game(this.boardSize);
+                newGame.board = game.board;
+                newGame.move(game.player === 'X' ? 'O' : 'X', i, j);
 
                 // For debug!
                 // console.log(JSON.stringify(newGame));
@@ -206,8 +229,10 @@ class Game {
                 var score = this.minimax(newGame, moves, scores, nextMove);
                 scores.push(score);
 
-                var move = {player: newGame.player, r: i, c: j};
+                var move = {r: i, c: j};
                 moves.push(move);
+
+                newGame.board[i][j] = '';
 
             }
 
