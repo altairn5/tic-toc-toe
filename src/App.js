@@ -145,18 +145,54 @@ class App extends Component {
 
             var nextMove = {};
 
-            var tempGameBoard = game.board;
-            game.board = JSON.parse(JSON.stringify(game.board));
+            // We are playing from cache for 1st move to decrease number of minimax calls drastically.
+            if (game.numberOfMoves === 1) {
 
-            game.minimaxCalls = 0;
+                if (r === 0 && c === 0) {
+                    nextMove.r = 1;
+                    nextMove.c = 1;
+                } else if (r === 0 && c === 1) {
+                    nextMove.r = 0;
+                    nextMove.c = 0;
+                } else if (r === 0 && c === 2) {
+                    nextMove.r = 1;
+                    nextMove.c = 1;
+                } else if (r === 1 && c === 0) {
+                    nextMove.r = 0;
+                    nextMove.c = 0;
+                } else if (r === 1 && c === 1) {
+                    nextMove.r = 0;
+                    nextMove.c = 0;
+                } else if (r === 1 && c === 2) {
+                    nextMove.r = 0;
+                    nextMove.c = 2;
+                } else if (r === 2 && c === 0) {
+                    nextMove.r = 1;
+                    nextMove.c = 1;
+                } else if (r === 2 && c === 1) {
+                    nextMove.r = 0;
+                    nextMove.c = 1;
+                } else if (r === 2 && c === 2) {
+                    nextMove.r = 1;
+                    nextMove.c = 1;
+                }
 
-            console.time('minimax');
-            game.minimax(game, nextMove);
-            console.timeEnd('minimax');
+            } else {
 
-            console.log('minimaxCalls: ' + game.minimaxCalls);
+                var tempGameBoard = game.board;
+                game.board = JSON.parse(JSON.stringify(game.board));
 
-            game.board = tempGameBoard;
+                game.minimaxCalls = 0;
+
+                console.time('minimax');
+                game.minimax(game, nextMove);
+                console.timeEnd('minimax');
+
+                console.log('minimaxCalls: ' + game.minimaxCalls);
+
+                game.board = tempGameBoard;
+
+            }
 
             game.move('O', nextMove.r, nextMove.c);
 
