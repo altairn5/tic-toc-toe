@@ -2,7 +2,9 @@
 
 A Tic Toc Toe implementation with Minimax algorithm.
 
-        ## Demo URL: [https://umdemir.github.io/assignment-t3/](https://umdemir.github.io/assignment-t3/)
+## Demo URL: 
+
+[https://umdemir.github.io/assignment-t3/](https://umdemir.github.io/assignment-t3/)
 
 ## Notes
 
