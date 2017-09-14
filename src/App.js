@@ -195,7 +195,9 @@ class App extends Component {
             }
 
             game.move('O', nextMove.r, nextMove.c);
-            console.log(JSON.parse(JSON.stringify(game)));
+
+            // For debug!
+            // console.log(JSON.parse(JSON.stringify(game)));
 
         }
 

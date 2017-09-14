@@ -187,7 +187,7 @@ class Game {
             return game.score;
         }
 
-        ++this.depth;
+        ++game.depth;
 
         var moves = [];
         var scores = [];
@@ -203,6 +203,7 @@ class Game {
 
                 var newGame = new Game(this.boardSize);
                 newGame.board = game.board;
+                newGame.depth = game.depth;
                 newGame.move(game.player === 'X' ? 'O' : 'X', i, j);
 
                 // For debug!
