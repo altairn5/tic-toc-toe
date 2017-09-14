@@ -80,9 +80,9 @@ class App extends Component {
 
             var resultText;
 
-            if (this.state.game.score > 0) {
+            if (this.state.game.winner === 'X') {
                 resultText = 'YOU WIN';
-            } else if (this.state.game.score < 0) {
+            } else if (this.state.game.winner === 'O') {
                 resultText = 'YOU LOST!';
             } else {
                 resultText = 'DRAW!';
@@ -195,6 +195,7 @@ class App extends Component {
             }
 
             game.move('O', nextMove.r, nextMove.c);
+            console.log(JSON.parse(JSON.stringify(game)));
 
         }
 

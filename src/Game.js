@@ -6,6 +6,7 @@ class Game {
         this.over = false;
         this.score = 0;
         this.player = '';
+        this.winner = '';
         this.numberOfMoves = 0;
         this.minimaxCalls = 0;
         this.depth = 0;
@@ -25,28 +26,6 @@ class Game {
 
         }
 
-    }
-
-    clone() {
-
-        var newInstance = new Game(this.boardSize);
-        newInstance.boardSize = this.boardSize;
-
-        for (var i = 0; i < this.boardSize; ++i) {
-
-            for (var j = 0; j < this.boardSize; ++j) {
-                newInstance.board[i][j] = this.board[i][j];
-            }
-
-        }
-
-        newInstance.over = this.over;
-        newInstance.score = this.score;
-        newInstance.player = this.player;
-        newInstance.numberOfMoves = this.numberOfMoves;
-        newInstance.minimaxCalls = this.minimaxCalls;
-        newInstance.depth = this.depth;
-        return newInstance;
     }
 
     move(player, r, c) {
@@ -73,28 +52,6 @@ class Game {
     calculateScore() {
 
         var found, i, j, controlState;
-
-        // Check if it is draw.
-        found = true;
-
-        for (i = 0; i < this.boardSize; ++i) {
-
-            for (j = 0; j < this.boardSize; ++j) {
-
-                if (this.board[i][j] === '') {
-                    found = false;
-                    break;
-                }
-
-            }
-
-        }
-
-        if (found) {
-            this.over = true;
-            this.score = 0;
-            return;
-        }
 
         // Check horizontal and vertical lines.
         for (i = 0; i < this.boardSize; ++i) {
@@ -193,10 +150,33 @@ class Game {
 
         }
 
+        // Check if it is draw.
+        found = true;
+
+        for (i = 0; i < this.boardSize; ++i) {
+
+            for (j = 0; j < this.boardSize; ++j) {
+
+                if (this.board[i][j] === '') {
+                    found = false;
+                    break;
+                }
+
+            }
+
+        }
+
+        if (found) {
+            this.over = true;
+            this.score = 0;
+            return;
+        }
+
     }
 
     setWinner(player) {
-        this.score = player === 'X' ? 10 : -10;
+        this.winner = player;
+        this.score = player === 'X' ? 10 - this.depth : this.depth - 10;
     }
 
     minimax(game, nextMove) {
@@ -206,6 +186,8 @@ class Game {
         if (game.over) {
             return game.score;
         }
+
+        ++this.depth;
 
         var moves = [];
         var scores = [];
